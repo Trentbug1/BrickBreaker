@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Brick Breaker</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'black';
+            
+
+            setInterval(drawSquare, 30);
+            var x = (innerWidth/2) -100;
+            var y = (innerHeight/2) - 100 ;
+            var xspeed = Math.random() * 10 + 5;
+            var yspeed = Math.random() * 10 + 5;
+            
+            if (Math.random() > 0.5) {
+                xspeed *= -1;
+            }
+            if (Math.random() > 0.5) {
+                yspeed *= -1;
+            }
+            console.log(xspeed);
+            console.log(yspeed);
+
+            function drawSquare() {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = 'black';
+                ctx.fillRect(x, y, 100, 100);
+                x += xspeed;
+                y += yspeed;
+                if (x >= window.innerWidth-100) {
+                    xspeed *= -1;
+                }
+                if (x <= 0) {
+                    xspeed *= -1;
+                
+                }
+                if (y >= window.innerHeight - 100) {
+                    yspeed *= -1;
+                }
+                if (y <= 0) {
+                    yspeed *= -1;
+                }
+            }
+        }
+
+    </script>
+    
+</body>
+</html>
