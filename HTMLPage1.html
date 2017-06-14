@@ -22,13 +22,13 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            ctx.fillStyle = 'red';
+            ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = 'black';
+            
             
 
-            setInterval(drawSquare, 30);
+            setInterval(drawSquare, 75);
             var x = (innerWidth/2) -100;
             var y = (innerHeight/2) - 100 ;
             var xspeed = Math.random() * 10 + 5;
@@ -42,11 +42,22 @@
             }
             console.log(xspeed);
             console.log(yspeed);
+			
+			function getRandomColor(){
+				var letters = '0123456789ABCDEF';
+				var color = '#';
+				for (var i = 0; i < 6; i++ ) {
+				 color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+			
 
             function drawSquare() {
-                ctx.fillStyle = 'red';
-                ctx.fillRect(0, 0, canvas.width, canvas.height)
                 ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
+                ctx.fillStyle = getRandomColor();
                 ctx.fillRect(x, y, 100, 100);
                 x += xspeed;
                 y += yspeed;
