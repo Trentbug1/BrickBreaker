@@ -22,59 +22,105 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+           
 
             
             
 
-            setInterval(drawSquare, 75);
-            var x = (innerWidth/2) -100;
-            var y = (innerHeight/2) - 100 ;
-            var xspeed = Math.random() * 10 + 5;
-            var yspeed = Math.random() * 10 + 5;
+            //setInterval(drawSquare, 75);
+            var pWidth = 250;
+            var pHeight = 30;
+            var paddleX = (innerWidth / 2) - pWidth / 2;
+            var paddleSpeed = 0;
+            //var y = (innerHeight/2) - 100 ;
+            //var xspeed = Math.random() * 10 + 5;
+            //var yspeed = Math.random() * 10 + 5;
             
-            if (Math.random() > 0.5) {
-                xspeed *= -1;
-            }
-            if (Math.random() > 0.5) {
-                yspeed *= -1;
-            }
-            console.log(xspeed);
-            console.log(yspeed);
+            //if (Math.random() > 0.5) {
+            //    xspeed *= -1;
+            //}
+            //if (Math.random() > 0.5) {
+            //    yspeed *= -1;
+            //}
+
+            //console.log(xspeed);
+            //console.log(yspeed);
 			
-			function getRandomColor(){
+            setInterval(function () {
+                update();
+                draw();
+            }, 30);
+
+            document.addEventListener('keydown', keyPress);                /*37,39*/
+            document.addEventListener('keyup', function () {
+                paddleSpeed = 0;
+            });
+
+
+            function getRandomColor() {
 				var letters = '0123456789ABCDEF';
 				var color = '#';
 				for (var i = 0; i < 6; i++ ) {
 				 color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
+                }
+                return color;
+            }
 
-			
-
-            function drawSquare() {
-                ctx.fillStyle = 'black';
-                ctx.fillRect(0, 0, canvas.width, canvas.height)
-                ctx.fillStyle = getRandomColor();
-                ctx.fillRect(x, y, 100, 100);
-                x += xspeed;
-                y += yspeed;
-                if (x >= window.innerWidth-100) {
-                    xspeed *= -1;
-                }
-                if (x <= 0) {
-                    xspeed *= -1;
-                
-                }
-                if (y >= window.innerHeight - 100) {
-                    yspeed *= -1;
-                }
-                if (y <= 0) {
-                    yspeed *= -1;
+            function keyPress(e) {
+                console.log(e.keyCode);
+                if (e.keyCode == 37) {
+                    paddleSpeed = -20;
+                } else if (e.keyCode == 39) {
+                    paddleSpeed = 20;
                 }
             }
+            
+            //function drawSquare() {
+            //    ctx.fillStyle = 'black';
+            //    ctx.fillRect(0, 0, canvas.width, canvas.height)
+            //    ctx.fillStyle = 'blue';
+            //    ctx.fillRect(x, y, 100, 100);
+                
+            //    x += xspeed;
+            //    y += yspeed;
+            //    if (x >= window.innerWidth-100) {
+            //        xspeed *= -1;
+            //    }
+            //    if (x <= 0) {
+            //        xspeed *= -1;
+                
+            //    }
+            //    if (y >= window.innerHeight - 100) {
+            //        yspeed *= -1;
+            //    }
+            //    if (y <= 0) {
+            //        yspeed *= -1;
+            //    }
+            //}
+            
+
+            function update() {
+                
+                if (paddleX > 0 && paddleX < canvas.width - pWidth) {
+                    paddleX += paddleSpeed;
+                    
+              
+                } else if (paddleX > 0){
+                    paddleX = canvas.clientWidth - pWidth - 1;
+                } else {
+                    paddleX = 1;
+                }
+
+            }
+
+            function draw() {
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'red';
+                ctx.fillRect(paddleX, canvas.height-100, 250, 30);
+                
+            }
+
         }
 
     </script>
