@@ -49,7 +49,7 @@
             setInterval(function () {
                 update();
                 draw();
-            }, 30);
+            }, 20);
 
             document.addEventListener('keydown', keyPress);                /*37,39*/
             document.addEventListener('keyup', function () {
@@ -117,7 +117,7 @@
                 ctx.fillStyle = 'black';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = 'red';
-                ctx.fillRect(paddleX, canvas.height-100, 250, 30);
+                ctx.fillRect(paddleX, canvas.height-50, 200, 20);
                 
             }
 
