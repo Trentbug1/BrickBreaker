@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Brick Breaker</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        window.onload = function () {
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            var score = 0;
+            var ball = new Ball();
+
+            var block = new Block(500, 100, 250, 'blue');
+
+            var mypaddle = new Paddle();
+
+
+            function Paddle() { 
+                var pWidth = 200;
+                this.xposition = (window.innerWidth / 2) - (pWidth / 2);
+                this.yspostion = window.innerHeight - 30;
+                this.xspeed = 0;                
+                this.draw = function () {
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(this.xposition, this.yspostion, pWidth, 20);
+                    
+                    
+                }
+                this.update = function () {
+                        if (this.xposition > 0 && this.xposition < canvas.width - (pWidth / 2)) {
+                            this.xposition += this.xspeed;
+
+
+                        } else if (this.xposition > 0) {
+                            this.xposition = canvas.clientWidth - pWidth - 1;
+                        } else {
+                            this.xposition = 1;
+                        } 
+                    }    
+                                        
+                                       
+            }
+
+            function Ball() {
+                this.xposition = canvas.width / 2;
+                this.yposition = canvas.height / 4;
+                this.xspeed = 10;
+                this.yspeed = 5;
+                var radius = 20;
+                this.draw = function () {
+                    ctx.fillStyle = 'green';
+                    ctx.beginPath();
+                    ctx.arc(this.xposition, this.yposition, radius, 0, Math.PI * 2, true);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                this.update = function () {
+                    this.xposition += this.xspeed;
+                    this.yposition += this.yspeed;
+                    if (this.xposition > canvas.width - radius) {
+                        this.xspeed = this.xspeed * -1;
+                    } else if (this.xposition < radius) {
+                        this.xspeed = this.xspeed * -1;
+                    }
+
+                    if (this.yposition > canvas.height - radius) {
+                        this.xposition = canvas.width / 2;
+                        this.yposition = canvas.height / 2;
+                        this.xspeed = 0;
+                        this.yspeed = 0;
+                    } else if (this.yposition < radius) {
+                        this.yspeed = this.yspeed * -1;
+                    }
+
+
+                    if ((this.xposition - radius >= mypaddle.xposition && this.xposition + radius <= mypaddle.xposition + 200) && (this.yposition + radius >= canvas.height - 30)) {         //ball collides with paddle
+                        this.yspeed *= -1;
+                    }
+                }
+            }
+
+
+            function Block(xPos, yPos, width, color) {
+                this.xposition = xPos;
+                this.yposition = yPos;
+                this.width = width;
+                this.color = color;
+                this.destroyed = false;
+                this.draw = function () {
+                    if (!this.destroyed) {
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(this.xposition, this.yposition, this.width, 75);
+                    }                
+                }
+
+
+                this.checkCollision = function () {
+                    if ( (!this.destroyed) && (ball.xposition - 20 >= this.xposition && ball.xposition + 20 <= this.xposition + width) && 
+                        (ball.yposition + 20 >= this.yposition && ball.yposition - 20 <= this.yposition + 75) ) {
+                        this.destroyed = true;
+                        ball.yspeed *= -1;
+                        score++;
+                    }
+                }
+            }
+            
+            function drawScore() {
+                ctx.fillStyle = 'white';
+                ctx.font = '22px Verdana';
+                ctx.fillText('Blocks Hit: ' + score, canvas.clientWidth - 200, 50);
+            }
+
+
+            setInterval(function () {
+                mypaddle.update();
+                ball.update();
+                block.checkCollision();
+
+                clearBoard();
+                drawScore();
+
+                mypaddle.draw();
+                ball.draw();
+                block.draw();
+            }, 20);
+
+            document.addEventListener('keydown', keyPress);                /*37,39*/
+            document.addEventListener('keyup', function () {
+                mypaddle.xspeed = 0;
+            });
+
+
+            //function getRandomColor() {
+            //    var letters = '0123456789ABCDEF';
+            //    var color = '#';
+            //    for (var i = 0; i < 6; i++) {
+            //        color += letters[Math.floor(Math.random() * 16)];
+            //    }
+            //    return color;
+            //}
+
+            function clearBoard() {
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            function keyPress(e) {
+                
+                if (e.keyCode == 37) {
+                    mypaddle.xspeed = -20;
+                } else if (e.keyCode == 39) {
+                    mypaddle.xspeed = 20;
+                }
+            }
+
+            
+      }
+
+            //setInterval(drawSquare, 75);
+            //var pWidth = 250;
+            //var pHeight = 30;
+            //var paddleX = (innerWidth / 2) - pWidth / 2;
+            //var paddleSpeed = 0;
+            //var y = (innerHeight/2) - 100 ;
+            //var xspeed = Math.random() * 10 + 5;
+            //var yspeed = Math.random() * 10 + 5;
+
+            //if (Math.random() > 0.5) {
+            //    xspeed *= -1;
+            //}
+            //if (Math.random() > 0.5) {
+            //    yspeed *= -1;
+            //}
+
+            //console.log(xspeed);
+            //console.log(yspeed);
+
+            
+
+            //function drawSquare() {
+            //    ctx.fillStyle = 'black';
+            //    ctx.fillRect(0, 0, canvas.width, canvas.height)
+            //    ctx.fillStyle = 'blue';
+            //    ctx.fillRect(x, y, 100, 100);
+
+            //    x += xspeed;
+            //    y += yspeed;
+            //    if (x >= window.innerWidth-100) {
+            //        xspeed *= -1;
+            //    }
+            //    if (x <= 0) {
+            //        xspeed *= -1;
+
+            //    }
+            //    if (y >= window.innerHeight - 100) {
+            //        yspeed *= -1;
+            //    }
+            //    if (y <= 0) {
+            //        yspeed *= -1;
+            //    }
+            //}
+
+
+            //function update() {
+
+            //    if (paddleX > 0 && paddleX < canvas.width - (pWidth/2)) {
+            //        paddleX += paddleSpeed;
+
+
+            //    } else if (paddleX > 0){
+            //        paddleX = canvas.clientWidth - pWidth -1;
+            //    } else {
+            //        paddleX = 1;
+            //    }
+
+            //}
+
+            //function draw() {
+            //    ctx.fillStyle = 'black';
+            //    ctx.fillRect(0, 0, canvas.width, canvas.height);
+            //    ctx.fillStyle = 'red';
+            //    ctx.fillRect(paddleX, canvas.height-50, 200, 20);
+
+            //}
+
+        
+
+    </script>
+
+</body>
+</html>
